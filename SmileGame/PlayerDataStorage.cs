@@ -28,7 +28,7 @@ namespace SmileGame
         public PlayerDataStorage(int health)
         {
             Health = health;
-            Task.Run(GetInputDirection);
+            Task.Run(GetInputDirection,Game.ct);
         }
         public void GetInputDirection()
         {
@@ -54,7 +54,10 @@ namespace SmileGame
         }
         public void Addscore()
         {
-            Score++;
+            if(!IsDeath)
+            {
+                Score++;
+            } 
         }
     }
 }

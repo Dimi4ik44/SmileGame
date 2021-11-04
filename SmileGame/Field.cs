@@ -7,11 +7,13 @@ namespace SmileGame
 {
     class Field
     {
+        public Game GameLink { get; set; }
         private Cell[,] Cells { get; set; }
         public int SizeX { get { return Cells.GetLength(0); } }
         public int SizeY { get { return Cells.GetLength(1); } }
-        public Field(int x = 10,int y = 10)
+        public Field(Game gameLink, int x = 10,int y = 10)
         {
+            GameLink = gameLink;
             Cells = new Cell[x, y];
             Fill();
         }

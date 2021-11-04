@@ -9,6 +9,7 @@ namespace SmileGame
         static public object lockObj = new object();
         static public Stats<PlayerDataStorage> stats { get; set; }
         static public Field _Field { get; set; }
+        static public GameLog logger { get; set; }
         public static void RenderField()
         {
             lock (lockObj)
@@ -17,6 +18,7 @@ namespace SmileGame
                 Console.Clear();
                 _Field.Show();
                 stats.Show();
+                //logger.ShowLog();
             }
         }
     }

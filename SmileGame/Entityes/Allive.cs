@@ -8,6 +8,11 @@ namespace SmileGame
 {
     class Allive : Entity, IMovable
     {
+        public delegate void CustomEventHandler(string message);
+        public event CustomEventHandler onMove;
+        public event CustomEventHandler onAttack;
+        public event CustomEventHandler onTakeDamage;
+        public event CustomEventHandler onDeath;
         public Direction Dir { get; set; }
         public int Health { get; set; }
         public bool IsDeath { get; set; }
@@ -18,6 +23,14 @@ namespace SmileGame
         }
 
         public bool IsPlayer { get { return this is Player; } }
+        public override void SpawnOnField(Field field)
+        {
+            base.SpawnOnField(field);
+            onMove += FieldLink.GameLink.gl.LogAction;
+            onAttack += FieldLink.GameLink.gl.LogAction;
+            onDeath += FieldLink.GameLink.gl.LogAction;
+            onTakeDamage += FieldLink.GameLink.gl.LogAction;
+        }
         public virtual void Move()
         {
             if(!IsDeath)
@@ -44,7 +57,9 @@ namespace SmileGame
                 {
                     cell.EntityHolder = this;
                     CellLink.EntityHolder = null;
+                    Cell tempOldPos = CellLink;
                     CellLink = cell;
+                    InvokeOnMoveEvent($"(MOVE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Move to pos:{CellLink.Pos}, Old pos:{tempOldPos.Pos}");
                 }
                 else if (cell?.EntityHolder != null)
                 {
@@ -69,7 +84,10 @@ namespace SmileGame
         }
         public virtual void Attack(Allive enemy)
         {
-            enemy.TakeDamage(1);
+            int damage = 1;
+            InvokeOnAttackEvent($"(ATTACK EVENT)Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer}, pos{CellLink.Pos} | Enemy name:{enemy.Name}, damage:{damage}, renderChar:{enemy.RenderChar}, isDeath:{enemy.IsDeath}, health:{enemy.Health}, isPlayer:{enemy.IsPlayer}, pos{enemy.CellLink.Pos}");
+            enemy.TakeDamage(damage);
+            
         }
         public virtual void SetHealth(int ammount)
         {
@@ -90,7 +108,26 @@ namespace SmileGame
                 Health = 0;
                 IsDeath = true;
                 CellLink.EntityHolder = null;
-            }           
+                InvokeOnDeathEvent($"(DEATH EVENT) Allive entity| Name:{Name}, renderChar:{RenderChar}, Died!");
+                return;
+            }
+            InvokeOnTakeDamageEvent($"(TAKE DAMAGE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer}, pos{CellLink.Pos} | Damage taken:{ammount}");
+        }
+        public void InvokeOnMoveEvent(string mess)
+        {
+            onMove?.Invoke(mess);
+        }
+        public void InvokeOnAttackEvent(string mess)
+        {
+            onAttack?.Invoke(mess);
+        }
+        public void InvokeOnTakeDamageEvent(string mess)
+        {
+            onTakeDamage?.Invoke(mess);
+        }
+        public void InvokeOnDeathEvent(string mess)
+        {
+            onDeath?.Invoke(mess);
         }
     }
 }

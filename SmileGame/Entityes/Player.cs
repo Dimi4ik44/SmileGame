@@ -39,7 +39,9 @@ namespace SmileGame.Entityes
                 {
                     cell.EntityHolder = this;
                     CellLink.EntityHolder = null;
+                    Cell tempOldPos = CellLink;
                     CellLink = cell;
+                    InvokeOnMoveEvent($"(MOVE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Move to pos:{CellLink.Pos}, Old pos:{tempOldPos.Pos}");
                 }
                 else if (cell?.EntityHolder != null)
                 {

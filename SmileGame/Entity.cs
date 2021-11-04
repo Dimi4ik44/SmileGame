@@ -20,7 +20,7 @@ namespace SmileGame
             Type = type;
             Color = color;
         }
-        public void SpawnOnField(Field field)
+        public virtual void SpawnOnField(Field field)
         {
             Random rnd = new Random();
             Cell cell;
