@@ -7,16 +7,18 @@ namespace SmileGame
     class Entity
     {
         public EntityType Type { get; set; }
+        public ConsoleColor Color { get; set; }
         public Field FieldLink { get; set; }
         public Cell CellLink { get; set; }
         public string Name { get; set; }
         public char RenderChar { get; set; }
-        public Entity(string name, char renderChar, Cell cLink, EntityType type = EntityType.Neutral)
+        public Entity(string name, char renderChar, Cell cLink, ConsoleColor color = ConsoleColor.White, EntityType type = EntityType.Neutral)
         {
             Name = name;
             RenderChar = renderChar;
             CellLink = cLink;
             Type = type;
+            Color = color;
         }
         public void SpawnOnField(Field field)
         {

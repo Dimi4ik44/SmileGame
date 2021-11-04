@@ -10,8 +10,10 @@ namespace SmileGame
     {
         public Direction Dir { get; set; }
         public int Health { get; set; }
-        public Allive(string name, char renderChar, Cell cLink, EntityType type = EntityType.Neutral) : base(name, renderChar, cLink, type)
+        public bool IsDeath { get; set; }
+        public Allive(string name, char renderChar, Cell cLink, ConsoleColor color = ConsoleColor.White, EntityType type = EntityType.Neutral, int health = 100) : base(name, renderChar, cLink, color, type)
         {
+            Health = health;
         }
 
         public bool IsPlayer { get { return this is Player; } }
@@ -41,6 +43,26 @@ namespace SmileGame
                 CellLink.EntityHolder = null;
                 CellLink = cell;
             }
+        }
+        public virtual void SetHealth(int ammount)
+        {
+            if (IsDeath) return;
+            Health = ammount;
+        }
+        public virtual void AddHealth(int ammount)
+        {
+            if (IsDeath) return;
+            Health += ammount;
+        }
+        public virtual void TakeDamage(int ammount)
+        {
+            if (IsDeath) return;
+            Health -= ammount;
+            if (Health <= 0)
+            {
+                Health = 0;
+                IsDeath = true;
+            }           
         }
     }
 }

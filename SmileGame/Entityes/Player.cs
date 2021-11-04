@@ -8,10 +8,11 @@ namespace SmileGame.Entityes
     class Player : Allive
     {
         public PlayerDataStorage DataStorage { get; set; }
-        public Player(string name, char renderChar, Cell cLink, PlayerDataStorage pds, EntityType type = EntityType.Neutral) : base(name, renderChar, cLink, type)
+        public Player(string name, char renderChar, Cell cLink, PlayerDataStorage pds, ConsoleColor color = ConsoleColor.White, EntityType type = EntityType.Neutral, int health = 100) : base(name, renderChar, cLink, color, type, health)
         {
             DataStorage = pds;
             Health = pds.Health;
+            DataStorage.DirChange += (a,b)=> { Move();};
         }
         public override void Move()
         {
@@ -38,6 +39,23 @@ namespace SmileGame.Entityes
                 CellLink.EntityHolder = null;
                 CellLink = cell;
             }
+            UIFieldScreen.RenderField();
+        }
+        public override void SetHealth(int ammount)
+        {
+            base.SetHealth(ammount);
+            DataStorage.Health = ammount;
+        }
+        public override void AddHealth(int ammount)
+        {
+            base.AddHealth(ammount);
+            DataStorage.Health += ammount;
+        }
+        public override void TakeDamage(int ammount)
+        {
+            base.TakeDamage(ammount);
+            DataStorage.Health = Health;
+            DataStorage.IsDeath = IsDeath;
         }
     }
 }

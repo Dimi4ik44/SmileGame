@@ -54,11 +54,14 @@ namespace SmileGame
                 Console.WriteLine("");
                 for (int k = 0; k < SizeX; k++)
                 {
-                    Console.Write($"| {(Cells[k, i].EntityHolder != null ? Cells[k, i].EntityHolder.RenderChar : '-')} ");
+                    Console.Write($"| ");
+                    Console.ForegroundColor = Cells[k, i].EntityHolder == null ? ConsoleColor.White : Cells[k, i].EntityHolder.Color;
+                    Console.Write($"{(Cells[k, i].EntityHolder != null ? Cells[k, i].EntityHolder.RenderChar : '-')} ");
+                    Console.ResetColor();
                 }
                 Console.Write($"|\n");
             }
-            Console.Write(spliter);
+            Console.WriteLine(spliter);
         }
         public bool CanSpawn(int x, int y)
         {

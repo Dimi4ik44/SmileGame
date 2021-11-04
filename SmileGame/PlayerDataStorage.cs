@@ -7,9 +7,12 @@ namespace SmileGame
 {
     class PlayerDataStorage
     {
+        public event EventHandler DirChange;
+        public bool IsDeath { get; set; }
         public int Health { get; set; }
         public List<Valute> ValuteList { get; set; } //list of valutes
         public Direction Dir { get; set; }
+        public int Score { get; set; }
         public Valute GetValuteByName(string nameOfValute)
         {
             foreach (var item in ValuteList)
@@ -41,6 +44,7 @@ namespace SmileGame
                         Dir = Direction.Right;
                         break;
                 }
+                DirChange?.Invoke(this, new EventArgs());
             }
         }
     }
