@@ -12,7 +12,7 @@ namespace SmileGame
 
         public override void Show()
         {
-            Console.WriteLine($"Cur direction: {Data.Dir} - Cur Health: {Data.Health}");
+            Console.WriteLine($"Cur direction: {Data.Dir} - Cur Health: {Data.Health} - Cur SCORE: {Data.Score}");
         }
     }
 }

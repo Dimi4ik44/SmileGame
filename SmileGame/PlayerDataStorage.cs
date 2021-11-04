@@ -25,6 +25,11 @@ namespace SmileGame
         {
             Task.Run(GetInputDirection);
         }
+        public PlayerDataStorage(int health)
+        {
+            Health = health;
+            Task.Run(GetInputDirection);
+        }
         public void GetInputDirection()
         {
             while(true)
@@ -46,6 +51,10 @@ namespace SmileGame
                 }
                 DirChange?.Invoke(this, new EventArgs());
             }
+        }
+        public void Addscore()
+        {
+            Score++;
         }
     }
 }

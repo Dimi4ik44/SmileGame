@@ -16,31 +16,52 @@ namespace SmileGame.Entityes
         }
         public override void Move()
         {
-            Cell cell = null;
-            Dir = DataStorage.Dir;
-            switch (Dir)
+            if(!IsDeath)
             {
-                case Direction.Up:
-                    cell = FieldLink.GetCell(CellLink.Pos - Vector2.UnitY);
-                    break;
-                case Direction.Down:
-                    cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitY);
-                    break;
-                case Direction.Left:
-                    cell = FieldLink.GetCell(CellLink.Pos - Vector2.UnitX);
-                    break;
-                case Direction.Right:
-                    cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitX);
-                    break;
-            }
-            if (cell!=null && cell?.EntityHolder == null)
-            {
-                cell.EntityHolder = this;
-                CellLink.EntityHolder = null;
-                CellLink = cell;
+                Cell cell = null;
+                Dir = DataStorage.Dir;
+                switch (Dir)
+                {
+                    case Direction.Up:
+                        cell = FieldLink.GetCell(CellLink.Pos - Vector2.UnitY);
+                        break;
+                    case Direction.Down:
+                        cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitY);
+                        break;
+                    case Direction.Left:
+                        cell = FieldLink.GetCell(CellLink.Pos - Vector2.UnitX);
+                        break;
+                    case Direction.Right:
+                        cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitX);
+                        break;
+                }
+                if (cell != null && cell?.EntityHolder == null)
+                {
+                    cell.EntityHolder = this;
+                    CellLink.EntityHolder = null;
+                    CellLink = cell;
+                }
+                else if (cell?.EntityHolder != null)
+                {
+                    if (cell.EntityHolder is Allive)
+                    {
+                        switch (cell.EntityHolder.Type)
+                        {
+                            case EntityType.Enemy:
+                                break;
+                            case EntityType.Friendly:
+                                break;
+                            case EntityType.Neutral:
+                                Attack(cell.EntityHolder as Allive);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
             UIFieldScreen.RenderField();
-        }
+        }          
         public override void SetHealth(int ammount)
         {
             base.SetHealth(ammount);

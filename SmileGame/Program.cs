@@ -7,10 +7,12 @@ namespace SmileGame
 {
     class Program
     {
+        public static event EventHandler Update;
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            PlayerDataStorage pds = new PlayerDataStorage();
+            PlayerDataStorage pds = new PlayerDataStorage(Allive.defaultHealth);
+            Update += (a,b)=> { pds.Addscore(); };
             Stats<PlayerDataStorage> mgs = new MainGameStats(pds);
             UIFieldScreen.stats = mgs;           
             List <Entity> entityList = new List<Entity>();
@@ -40,7 +42,7 @@ namespace SmileGame
                             (item as Allive)?.Move();
                         }
                     }
-
+                    Update?.Invoke(new object(), new EventArgs());
                     UIFieldScreen.RenderField();
 
                 }
