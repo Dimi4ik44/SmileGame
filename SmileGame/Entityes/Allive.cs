@@ -1,4 +1,5 @@
 ﻿using SmileGame.Entityes;
+using SmileGame.Entityes.Items;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -13,6 +14,7 @@ namespace SmileGame
         public event CustomEventHandler onAttack;
         public event CustomEventHandler onTakeDamage;
         public event CustomEventHandler onDeath;
+        public event CustomEventHandler onUse;
         public Direction Dir { get; set; }
         public int Health { get; set; }
         public bool IsDeath { get; set; }
@@ -30,6 +32,7 @@ namespace SmileGame
             onAttack += FieldLink.GameLink.gl.LogAction;
             onDeath += FieldLink.GameLink.gl.LogAction;
             onTakeDamage += FieldLink.GameLink.gl.LogAction;
+            onUse += FieldLink.GameLink.gl.LogAction;
         }
         public virtual void Move()
         {
@@ -53,13 +56,23 @@ namespace SmileGame
                         cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitX);
                         break;
                 }
-                if (cell != null && cell?.EntityHolder == null)
+                if (cell != null && (cell?.EntityHolder == null || cell?.EntityHolder is BaseItem))
                 {
+                    BaseItem item = null;
+                    if (cell?.EntityHolder is BaseItem)
+                    {
+                        item = cell.EntityHolder as BaseItem;
+                    }
                     cell.EntityHolder = this;
                     CellLink.EntityHolder = null;
                     Cell tempOldPos = CellLink;
                     CellLink = cell;
                     InvokeOnMoveEvent($"(MOVE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Move to pos:{CellLink.Pos}, Old pos:{tempOldPos.Pos}");
+                    if (item != null)
+                    {
+                        item.Use(this);
+                        InvokeOnUseEvent($"(USE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Use:{item.Name}, Desc:{item.Description}");
+                    }
                 }
                 else if (cell?.EntityHolder != null)
                 {
@@ -126,6 +139,10 @@ namespace SmileGame
             onTakeDamage?.Invoke(mess);
         }
         public void InvokeOnDeathEvent(string mess)
+        {
+            onDeath?.Invoke(mess);
+        }
+        public void InvokeOnUseEvent(string mess)
         {
             onDeath?.Invoke(mess);
         }

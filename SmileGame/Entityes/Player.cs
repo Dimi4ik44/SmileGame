@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmileGame.Entityes.Items;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
@@ -35,13 +36,23 @@ namespace SmileGame.Entityes
                         cell = FieldLink.GetCell(CellLink.Pos + Vector2.UnitX);
                         break;
                 }
-                if (cell != null && cell?.EntityHolder == null)
+                if (cell != null && (cell?.EntityHolder == null || cell?.EntityHolder is BaseItem))
                 {
+                    BaseItem item = null;
+                    if (cell?.EntityHolder is BaseItem)
+                    {
+                        item = cell.EntityHolder as BaseItem;
+                    }
                     cell.EntityHolder = this;
                     CellLink.EntityHolder = null;
                     Cell tempOldPos = CellLink;
                     CellLink = cell;
                     InvokeOnMoveEvent($"(MOVE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Move to pos:{CellLink.Pos}, Old pos:{tempOldPos.Pos}");
+                    if (item!=null)
+                    {
+                        item.Use(this);
+                        InvokeOnUseEvent($"(USE EVENT) Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer} | Use:{item.Name}, Desc:{item.Description}");
+                    }
                 }
                 else if (cell?.EntityHolder != null)
                 {

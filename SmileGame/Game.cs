@@ -1,4 +1,5 @@
 ﻿using SmileGame.Entityes;
+using SmileGame.Entityes.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,7 @@ namespace SmileGame
 {
     class Game
     {
+        Random rnd = new Random();
         public static event EventHandler Update;
         public GameLog gl = new GameLog();
         CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -49,6 +51,7 @@ namespace SmileGame
             mgs.Show();
             Task.Run(() =>
             {
+                int counter = 0;
                 while (true)
                 {
                     Task.Delay(1000).GetAwaiter().GetResult();
@@ -59,6 +62,21 @@ namespace SmileGame
                         {
                             (item as Allive)?.Move();
                         }
+                    }
+                    counter++;
+                    if(counter==15)
+                    {
+                        counter = 0;
+                        switch (rnd.Next(0,2))
+                        {
+                            case 0:
+                                f.SpawnEntity(new Bandage(null));
+                                break;
+                            case 1:
+                                f.SpawnEntity(new ShineCrystal(null));
+                                break;
+                        }
+                        
                     }
                     Update?.Invoke(this, new EventArgs());
                     UIFieldScreen.RenderField();
