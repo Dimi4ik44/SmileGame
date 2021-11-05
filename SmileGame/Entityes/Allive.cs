@@ -97,6 +97,7 @@ namespace SmileGame
         }
         public virtual void Attack(Allive enemy)
         {
+            Console.Beep(1200, 10);
             int damage = 1;
             InvokeOnAttackEvent($"(ATTACK EVENT)Allive entity| Name:{Name}, Render char:{RenderChar}, Move Dir:{Dir}, Health:{Health}, IsDeath:{IsDeath}, Is player:{IsPlayer}, pos{CellLink.Pos} | Enemy name:{enemy.Name}, damage:{damage}, renderChar:{enemy.RenderChar}, isDeath:{enemy.IsDeath}, health:{enemy.Health}, isPlayer:{enemy.IsPlayer}, pos{enemy.CellLink.Pos}");
             enemy.TakeDamage(damage);
@@ -140,10 +141,12 @@ namespace SmileGame
         }
         public void InvokeOnDeathEvent(string mess)
         {
+            Console.Beep(4200, 100);
             onDeath?.Invoke(mess);
         }
         public void InvokeOnUseEvent(string mess)
         {
+            Console.Beep(3200, 10);
             onDeath?.Invoke(mess);
         }
     }

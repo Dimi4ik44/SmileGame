@@ -88,6 +88,7 @@ namespace SmileGame
                     cell.EntityHolder = ent;
                     ent.FieldLink = this;
                     ent.CellLink = cell;
+                    Console.Beep(2000,10);
                     break;
                 }
                 counter++;

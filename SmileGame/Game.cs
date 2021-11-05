@@ -64,10 +64,10 @@ namespace SmileGame
                         }
                     }
                     counter++;
-                    if(counter==15)
+                    if(counter==5)
                     {
                         counter = 0;
-                        switch (rnd.Next(0,2))
+                        switch (rnd.Next(0,1))
                         {
                             case 0:
                                 f.SpawnEntity(new Bandage(null));
@@ -76,7 +76,10 @@ namespace SmileGame
                                 f.SpawnEntity(new ShineCrystal(null));
                                 break;
                         }
-                        
+                        Allive a = new Allive("WooF", '§', null, ConsoleColor.DarkYellow);
+                        entityList.Add(a);
+                        f.SpawnEntity(a);
+
                     }
                     Update?.Invoke(this, new EventArgs());
                     UIFieldScreen.RenderField();

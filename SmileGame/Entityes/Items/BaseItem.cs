@@ -12,7 +12,6 @@ namespace SmileGame.Entityes.Items
         }
         public virtual void Use(Allive user)
         {
-            CellLink.EntityHolder = null;
             CellLink = null;
         }
     }
