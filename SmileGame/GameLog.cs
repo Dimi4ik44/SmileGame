@@ -8,9 +8,9 @@ namespace SmileGame
     class GameLog
     {
         public List<string> messages = new List<string>();
-        public void LogAction(string mes)
+        public void LogAction(object sender, CustomEventArgs e)
         {
-            messages.Add(mes);
+            messages.Add(e.Message);
         }
         public void ShowLog()
         {

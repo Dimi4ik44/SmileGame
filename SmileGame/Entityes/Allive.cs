@@ -9,12 +9,11 @@ namespace SmileGame
 {
     class Allive : Entity, IMovable
     {
-        public delegate void CustomEventHandler(string message);
-        public event CustomEventHandler onMove;
-        public event CustomEventHandler onAttack;
-        public event CustomEventHandler onTakeDamage;
-        public event CustomEventHandler onDeath;
-        public event CustomEventHandler onUse;
+        public event EventHandler<CustomEventArgs> onMove;
+        public event EventHandler<CustomEventArgs> onAttack;
+        public event EventHandler<CustomEventArgs> onTakeDamage;
+        public event EventHandler<CustomEventArgs> onDeath;
+        public event EventHandler<CustomEventArgs> onUse;
         public Direction Dir { get; set; }
         public int Health { get; set; }
         public bool IsDeath { get; set; }
@@ -129,25 +128,25 @@ namespace SmileGame
         }
         public void InvokeOnMoveEvent(string mess)
         {
-            onMove?.Invoke(mess);
+            onMove?.Invoke(this,new CustomEventArgs() { Message = mess});
         }
         public void InvokeOnAttackEvent(string mess)
         {
-            onAttack?.Invoke(mess);
+            onAttack?.Invoke(this, new CustomEventArgs() { Message = mess });
         }
         public void InvokeOnTakeDamageEvent(string mess)
         {
-            onTakeDamage?.Invoke(mess);
+            onTakeDamage?.Invoke(this, new CustomEventArgs() { Message = mess });
         }
         public void InvokeOnDeathEvent(string mess)
         {
             Console.Beep(4200, 100);
-            onDeath?.Invoke(mess);
+            onDeath?.Invoke(this, new CustomEventArgs() { Message = mess });
         }
         public void InvokeOnUseEvent(string mess)
         {
             Console.Beep(3200, 10);
-            onDeath?.Invoke(mess);
+            onUse?.Invoke(this, new CustomEventArgs() { Message = mess });
         }
     }
 }
